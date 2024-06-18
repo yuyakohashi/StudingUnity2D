@@ -3,15 +3,16 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     private Transform _player;
+    private Rect _playerRect;
     [SerializeField] private float _speed = 5.0f;
-    [SerializeField] private GameObject _bulletPrefab = null;
+    [SerializeField] private int _playerLife = 5;
+    [SerializeField] private GameObject _playerBullet = null;
     [SerializeField] private float _bulletSpeed = 10.0f;
     [SerializeField] private float _jumpSpeed = 5.0f;//初速度
     [SerializeField] private float _gravity = 9.81f;//重力
     [SerializeField] private float _ground = -2.0f;//地面の高さ
     private float _verticalHeight = 0.0f;//垂直の高さ
     private bool _isGrounded = true;
-
     private void Awake()
     {
         _player = GetComponent<Transform>();
@@ -40,9 +41,9 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            if (_bulletPrefab == null) return;
+            if (_playerBullet == null) return;
 
-            GameObject bullet = Instantiate(_bulletPrefab, _player.position, Quaternion.identity);
+            GameObject bullet = Instantiate(_playerBullet, _player.position, Quaternion.identity);
             bullet.GetComponent<Bullet>().SetBulletSpeed(_bulletSpeed);
         }
     }
@@ -60,5 +61,16 @@ public class PlayerController : MonoBehaviour
                 _isGrounded = true;
             }
         }
+    }
+    public Rect GetPlayerRect()
+    {
+        _playerRect = new Rect(_player.position.x, _player.position.y, 0.5f, 0.5f);
+        return _playerRect;
+    }
+    public void AddDamage()
+    {
+        Debug.Log("ダメージを受けました");
+        _playerLife--;
+        if (_playerLife == 0) { Destroy(gameObject); }
     }
 }
