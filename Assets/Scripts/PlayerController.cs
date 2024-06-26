@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour
     {
         float x = Input.GetAxisRaw("Horizontal");
         transform.Translate(new Vector2(x * _speed * Time.deltaTime, 0));
+        _player.rotation = GetRotation();//マウスの方向にプレイヤーの向きを変える
     }
     private void Jump()
     {
@@ -37,13 +38,21 @@ public class PlayerController : MonoBehaviour
             _isGrounded = false;
         }
     }
+    private Quaternion GetRotation()
+    {
+        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 direction = (mousePosition - (Vector2)_player.position).normalized;
+
+        float _radian = Mathf.Atan2(direction.y, direction.x);
+        Quaternion _angle = Quaternion.AngleAxis(_radian * 180 / Mathf.PI, new Vector3(0, 0, 1));
+        return _angle;
+    }
     private void FireBullet()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetMouseButtonDown(0))
         {
             if (_playerBullet == null) return;
-
-            GameObject bullet = Instantiate(_playerBullet, _player.position, Quaternion.identity);
+            GameObject bullet = Instantiate(_playerBullet, _player.position, GetRotation());
             bullet.GetComponent<Bullet>().SetBulletSpeed(_bulletSpeed);
         }
     }
@@ -67,6 +76,7 @@ public class PlayerController : MonoBehaviour
         _playerRect = new Rect(_player.position.x, _player.position.y, 0.5f, 0.5f);
         return _playerRect;
     }
+
     public void AddDamage()
     {
         Debug.Log("ダメージを受けました");
