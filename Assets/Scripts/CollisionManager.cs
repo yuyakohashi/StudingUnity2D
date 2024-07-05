@@ -10,7 +10,7 @@ public class CollisionManager : MonoBehaviour
     private CollisionManager() { }
 
     [SerializeField] private PlayerController _player;
-    [SerializeField] private Enemy[] _enemies;
+    //[SerializeField] private Enemy[] _enemies;
     private void Update()
     {
         PlayerCollision();
