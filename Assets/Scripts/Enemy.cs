@@ -19,6 +19,7 @@ public class Enemy : MonoBehaviour
     private void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
+        if (_player == null ) return;
         _spawnPoint = GetComponent<SpawnPoint>();
     }
     private void Update()

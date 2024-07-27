@@ -22,7 +22,7 @@ public class Bullet : MonoBehaviour
     {
         _speed = speed;
     }
-    private void UpdateBulletRect()
+    protected void UpdateBulletRect()
     {
         _bulletRect = new Rect(_bulletTransform.position.x, _bulletTransform.position.y, 0.25f, 0.125f);
     }
